@@ -3,7 +3,7 @@
 #include "kv_engine.h"
 #include <iostream>
 
-const int BUFFER_SIZE = ( 1 << 7 );
+const int BUFFER_SIZE = ( 1 << 10 );
 
 namespace kv {
 
@@ -13,6 +13,7 @@ int read_pos;
 int write_pos;
 uint64_t head_raddr;
 uint32_t head_rkey;
+uint64_t read_head;
 
 /**
  * @description: start local engine service
@@ -25,6 +26,7 @@ bool LocalEngine::start(const std::string addr, const std::string port) {
   write_buffer = new char[BUFFER_SIZE * 128];
   read_pos = 0;
   write_pos = 0;
+  read_head = 0;
   m_rdma_conn_ = new ConnectionManager();
   if (m_rdma_conn_ == nullptr) return -1;
   if (m_rdma_conn_->init(addr, port, 4, 20)) return false;
@@ -171,11 +173,17 @@ bool LocalEngine::read(const std::string key, std::string &value) {
   {
     memcpy((void *)value.c_str(),write_buffer + 128 * (write_pos - 1),128);
   }
+  else if(read_head != 0 && read_head <= inter_val.remote_addr && inter_val.remote_addr - read_head < BUFFER_SIZE * 128 )
+    {
+        memcpy((void *)value.c_str(),read_buffer + 128 * (inter_val.remote_addr - read_head),128);
+    }
   else
   {
-    if (m_rdma_conn_->remote_read((void *)value.c_str(), inter_val.size,
+    if (m_rdma_conn_->remote_read(read_buffer, inter_val.size * BUFFER_SIZE,
                                 inter_val.remote_addr, inter_val.rkey))
     return false;
+     memcpy((void *)value.c_str(),read_buffer ,128);
+     read_head = inter_val.remote_addr;
   }
   
   // printf("read key: %s, value: %s, size:%d, %lld %d\n", key.c_str(),

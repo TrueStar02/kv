@@ -1,5 +1,6 @@
 # 小练习 请勿嘲笑
 
+用阿里的比赛做练习
 ```
 ubuntu@bianrunhua-kvs-2:~/codebase$ ./build/local 10.60.60.60 10001
 Write Time 2381457878 ns

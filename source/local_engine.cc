@@ -3,7 +3,7 @@
 #include "kv_engine.h"
 #include <iostream>
 
-const int BUFFER_SIZE = ( 1 << 3 );
+const int BUFFER_SIZE = ( 1 << 7 );
 
 namespace kv {
 

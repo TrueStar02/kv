@@ -32,7 +32,8 @@ int main(int argc, char *argv[]) {
         
     } 
 
-    /*Write*/
+
+
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
 
     auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start_time).count();
     std::cout << "Write Time " << duration << " ns\n";
-    std::cout <<"Thoughput:" << (double)duration / N << std::endl;
+    std::cout <<"Thoughput:" << N / (double)duration * 1000000000 << std::endl;
 
     /*read*/
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[]) {
     }
     duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start_time).count();
     std::cout << "Read Time " << duration << " ns\n";
-    std::cout <<"Thoughput:" << (double)duration / N << std::endl;
+    std::cout <<"Thoughput:" << N / (double)duration * 1000000000  << std::endl;
 
     kv_imp->stop();
     delete kv_imp;

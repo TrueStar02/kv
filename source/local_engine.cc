@@ -46,7 +46,7 @@ bool LocalEngine::write(const std::string key, const std::string value) {
   uint64_t remote_addr;
   uint32_t rkey;
 
-  int index = std::hash<std::string>()(key) & (SHARDING_NUM - 1);
+  int index = 0;
   m_mutex_[index].lock();
   bool found = false;
 
@@ -108,7 +108,7 @@ bool LocalEngine::write(const std::string key, const std::string value) {
  * @return {bool}  true for success
  */
 bool LocalEngine::read(const std::string key, std::string &value) {
-  int index = std::hash<std::string>()(key) & (SHARDING_NUM - 1);
+  int index = 0;
   internal_value_t inter_val;
   m_mutex_[index].lock();
   hash_map_slot *it = m_hash_map[index].find(key);

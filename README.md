@@ -1,5 +1,6 @@
 # 小练习 请勿嘲笑
 
+```
 ubuntu@bianrunhua-kvs-2:~/codebase$ ./build/local 10.60.60.60 10001
 Write Time 2381457878 ns
 Thoughput:419911
@@ -19,3 +20,4 @@ Write Time 2376856514 ns
 Thoughput:420724
 Read Time 2518932206 ns
 Thoughput:396994
+```
